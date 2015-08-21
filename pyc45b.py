@@ -83,7 +83,7 @@ def main():
     if resp[:-2] == "pf+":
         print "Start"
     else:
-        print "progMode error:" + resp
+        print "progMode error"
         exit(-1)
 
     with open(faddr) as f:
