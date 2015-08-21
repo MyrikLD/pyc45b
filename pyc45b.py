@@ -3,7 +3,7 @@ __AUTHOR__ = "Myrik"
 __CONTACT__ = "Myrik260138@tut.by"
 
 import serial
-import sys
+from sys import exit, argv
 from time import sleep
 import platform
 
@@ -27,13 +27,10 @@ def symb(r):
 
 
 def main():
-    args = sys.argv
+    args = argv
     args.pop(0)
-    args.append("-p COM1")
-    args.append("-f C:\\Hex.hex")
-    if len(args) < 2:
-        print "Using: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
-        exit(0)
+    # args.append("-p COM1")
+    # args.append("-f C:\\Hex.hex")
 
     baud = 115200
     faddr = ''
@@ -59,9 +56,14 @@ def main():
         print "Using:"
         print "Windows: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
         print "Linux: pyc45b.py -p /dev/ttyUSB0 -b 115200 -f hexfile.hex"
-        exit(0)
+        exit(-1)
 
-    ser = serial.Serial(ser, baud, xonxoff=True, timeout=0)
+    try:
+        ser = serial.Serial(ser, baud, xonxoff=True, timeout=0)
+    except serial.SerialException, e:
+        print "Serial error: " + e
+        exit(-1)
+
     resp = ''
     print "Waiting for reset MCU"
     while resp == '' or resp == '\x00':
