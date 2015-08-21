@@ -3,7 +3,8 @@
 (see <a href='http://www.chip45.com/info/chip45boot2.html'>http://www.chip45.com/info/chip45boot2.html</a> for details).
 
 <p>Typical use:</p>
-    Windows: pyc45b.py -p COM1 -b 115200 -f hexfile.hex
-    Linux: pyc45b.py -p /dev/ttyUSB0 -b 115200 -f hexfile.hex
+    pyc45b.py -p[SERIAL] -b[BAUD] -f[FILE.hex]
+    Windows: pyc45b.py -pCOM1 -b115200 -fhexfile.hex
+    Linux: pyc45b.py -p/dev/ttyUSB0 -b9600 -ffile.hex
     
 MyrikLD[BY] Aug2015
