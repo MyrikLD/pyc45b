@@ -5,6 +5,7 @@ __CONTACT__ = "Myrik260138@tut.by"
 import serial
 import sys
 from time import sleep
+import platform
 
 
 def symb(r):
@@ -28,10 +29,37 @@ def symb(r):
 def main():
     args = sys.argv
     args.pop(0)
+    args.append("-p COM1")
+    args.append("-f C:\\Hex.hex")
     if len(args) < 2:
-        print "Using: c45b.py [COMPORT_NUM] [FILE_PATH].hex"
+        print "Using: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
         exit(0)
-    ser = serial.Serial(int(args[0][3:]) - 1, 115200, xonxoff=True, timeout=0)
+
+    baud = 115200
+    faddr = ''
+    ser = ''
+
+    for a in args:
+        if a[0] == '-':
+            cmd = a[1]
+            a = a[3:]
+        else:
+            continue
+
+        if cmd == 'p':
+            ser = a[-2:]
+            if platform.system() == "Windows":
+                ser = int(a[3:]) - 1
+        elif cmd == 'f':
+            faddr = a
+        elif cmd == 'b':
+            baud = int(a)
+
+    if len(args) < 2 or faddr == '' or ser == '':
+        print "Using: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
+        exit(0)
+
+    ser = serial.Serial(ser, baud, xonxoff=True, timeout=0)
     resp = ''
     print "Waiting for reset MCU"
     while resp == '' or resp == '\x00':
@@ -52,7 +80,7 @@ def main():
     else:
         print "progMode Error: " + resp
         exit(-1)
-    with open(args[1]) as f:
+    with open(faddr) as f:
         for line in f:
             ser.write(line)
 
