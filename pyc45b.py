@@ -29,7 +29,7 @@ def symb(r):
 def main():
     args = argv
     args.pop(0)
-    # args.append("-p COM1")
+    # args.append("-p COM9")
     # args.append("-f C:\\Hex.hex")
 
     baud = 115200
@@ -39,12 +39,12 @@ def main():
     for a in args:
         if a[0] == '-':
             cmd = a[1]
-            a = a[3:]
+            a = a[2:]
         else:
             continue
 
         if cmd == 'p':
-            ser = a[-2:]
+            ser = a
             if platform.system() == "Windows":
                 ser = int(a[3:]) - 1
         elif cmd == 'f':
@@ -54,25 +54,26 @@ def main():
 
     if len(args) < 2 or faddr == '' or ser == '':
         print "Using:"
-        print "Windows: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
-        print "Linux: pyc45b.py -p /dev/ttyUSB0 -b 115200 -f hexfile.hex"
+        print "Windows: pyc45b.py -pCOM1 -b115200 -fhexfile.hex"
+        print "Linux: pyc45b.py -p/dev/ttyUSB0 -b115200 -fhexfile.hex"
         exit(-1)
 
     try:
         ser = serial.Serial(ser, baud, xonxoff=True, timeout=0)
     except serial.SerialException, e:
-        print "Serial error: " + e
+        print "Serial error: " + e.message
         exit(-1)
 
     print "Waiting for reset MCU"
     resp = ''
-    while resp == '' or resp == '\x00':
+    # while resp == '' or resp == '\x00':
+    while resp != 'c':
         ser.write('U')
-        resp = ser.read(15)
+        resp = ser.read(1)
     sleep(0.1)
-    resp += ser.read(15)
+    resp += ser.read(20)
     if resp[:5] == "c45b2":
-        print resp[:-3]
+        print "Bootloader version: " + resp[:-3]
     else:
         print "Sync error"
         exit(-1)
@@ -100,7 +101,7 @@ def main():
                 elif r == 2:
                     exit(-1)
 
-    print "\nRun programm...",
+    print "Run programm...",
     ser.write('g\n')
     sleep(1)
     resp = ser.read(10)
