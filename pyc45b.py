@@ -28,8 +28,6 @@ def symb(r):
 def main():
     args = sys.argv
     args.pop(0)
-    args.append("COM9")
-    args.append("C:\\Users\\Myrik\\AppData\\Local\\Temp\\build8746890051895017078.tmp\\xmega_admin_3.cpp.hex")
     if len(args) < 2:
         print "Using: c45b.py [COMPORT_NUM] [FILE_PATH].hex"
         exit(0)
