@@ -56,7 +56,9 @@ def main():
             baud = int(a)
 
     if len(args) < 2 or faddr == '' or ser == '':
-        print "Using: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
+        print "Using:"
+        print "Windows: pyc45b.py -p COM1 -b 115200 -f hexfile.hex"
+        print "Linux: pyc45b.py -p /dev/ttyUSB0 -b 115200 -f hexfile.hex"
         exit(0)
 
     ser = serial.Serial(ser, baud, xonxoff=True, timeout=0)
