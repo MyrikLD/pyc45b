@@ -2,10 +2,11 @@
 __AUTHOR__ = "Myrik"
 __CONTACT__ = "Myrik260138@tut.by"
 
-import serial
 from sys import exit, argv
 from time import sleep
-import platform
+from platform import system
+
+import serial
 
 
 def symb(r):
@@ -45,7 +46,7 @@ def main():
 
         if cmd == 'p':
             ser = a
-            if platform.system() == "Windows":
+            if system() == "Windows":
                 ser = int(a[3:]) - 1
         elif cmd == 'f':
             faddr = a
