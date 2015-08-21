@@ -5,3 +5,5 @@
 <p>Typical use:</p>
     Windows: pyc45b.py -p COM1 -b 115200 -f hexfile.hex
     Linux: pyc45b.py -p /dev/ttyUSB0 -b 115200 -f hexfile.hex
+    
+MyrikLD[BY] Aug2015
