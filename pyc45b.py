@@ -13,7 +13,7 @@ def symb(r):
         print r
         return 0
     elif r == '.':
-        print '.',
+        print r,
         return 0
     elif r == '+':
         print "End"
@@ -64,8 +64,8 @@ def main():
         print "Serial error: " + e
         exit(-1)
 
-    resp = ''
     print "Waiting for reset MCU"
+    resp = ''
     while resp == '' or resp == '\x00':
         ser.write('U')
         resp = ser.read(15)
@@ -82,13 +82,14 @@ def main():
     if resp[:-2] == "pf+":
         print "Start"
     else:
-        print "progMode Error: " + resp
+        print "progMode error:" + resp
         exit(-1)
+
     with open(faddr) as f:
         for line in f:
             ser.write(line)
 
-            resp = []
+            resp = ()
             while len(resp) == 0:
                 resp = list(ser.read(10))
 
@@ -108,8 +109,6 @@ def main():
     else:
         print "Fail!"
         exit(-1)
-
-    file.close()
     ser.close()
     exit(0)
 
