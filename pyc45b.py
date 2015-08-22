@@ -72,28 +72,38 @@ def main():
         ser.write('U')
         resp = ser.read(1)
     sleep(0.1)
-    resp += ser.read(20)
+    resp += ser.readall()
     if resp[:5] == "c45b2":
         print "Bootloader version: " + resp[:-3]
     else:
         print "Sync error"
         exit(-1)
     ser.write('pf\n')
-    sleep(1)
-    resp = ser.read(10)
-    if resp[:-2] == "pf+":
+
+    tick = 0
+    while resp != 'p':
+        resp = ser.read(1)
+        tick += 1
+        sleep(0.1)
+        if tick > 100:
+            print "progMode timeout"
+            exit(-1)
+    resp += ser.read(2)
+
+    if resp[2] == '+':
+        ser.flushInput()
         print "Start"
     else:
         print "progMode error"
         exit(-1)
 
+    resp = ()
     with open(faddr) as f:
         for line in f:
             ser.write(line)
 
-            resp = ()
             while len(resp) == 0:
-                resp = list(ser.read(10))
+                resp = list(ser.readall())
 
             while len(resp) != 0:
                 r = symb(resp.pop(0))
@@ -105,7 +115,7 @@ def main():
     print "Run programm...",
     ser.write('g\n')
     sleep(1)
-    resp = ser.read(10)
+    resp = ser.readall()
     if resp[:2] == "g+":
         print "Successful!"
     else:
