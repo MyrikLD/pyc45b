@@ -134,6 +134,16 @@ def main():
       print("Error: "+e.args[1])
       exit(0)
 
+    delay(0.1)
+    while len(resp) == 0:
+  	  resp = list(ser.readall())
+  	while len(resp) != 0:
+  		r = symb(resp.pop(0))
+  		if r == 1:
+  			break
+  		elif r == 2:
+  			exit(-1)
+
     print "Run programm...",
     ser.write('g\n')
     sleep(1)
