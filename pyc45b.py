@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-__AUTHOR__ = "Myrik"
-__CONTACT__ = "Myrik260138@tut.by"
-
+from __future__ import print_function
 from sys import exit, argv
 from time import sleep
 from platform import system
+
+__AUTHOR__ = "Myrik"
+__CONTACT__ = "Myrik260138@tut.by"
 
 import serial
 
@@ -14,7 +15,7 @@ def symb(r):
         print(r)
         return 0
     elif r == '.':
-        print r,
+        print(r, end='')
         return 0
     elif r == '+':
         print ("End")
@@ -73,8 +74,8 @@ def main():
     elif proto == '232':
         print("RS232:"+str(baud))
     else:
-      print("Unknown protocol: "+proto)
-      exit(0)
+        print("Unknown protocol: "+proto)
+        exit(0)
 
     print("Waiting for reset MCU")
 
@@ -131,20 +132,22 @@ def main():
                     elif r == 2:
                         exit(-1)
     except Exception as e:
-      print("Error: "+e.args[1])
-      exit(0)
+        print("Error: "+e.args[1])
+        exit(0)
 
-    delay(0.1)
+    sleep(0.1)
+
     while len(resp) == 0:
-  	  resp = list(ser.readall())
-  	while len(resp) != 0:
-  		r = symb(resp.pop(0))
-  		if r == 1:
-  			break
-  		elif r == 2:
-  			exit(-1)
+        resp = list(ser.readall())
+        
+    while len(resp) != 0:
+        r = symb(resp.pop(0))
+        if r == 1:
+            break
+        elif r == 2:
+            exit(-1)
 
-    print "Run programm...",
+    print("Run programm...", end='')
     ser.write('g\n')
     sleep(1)
     resp = ser.readall()
